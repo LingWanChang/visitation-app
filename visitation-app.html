@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V202607191832</h1>
+      <h1>探視日小幫手V202607191840</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -220,12 +220,19 @@ CALSCALE:GREGORIAN
 ${events}
 END:VCALENDAR`;
 
-  // 改成 application/octet-stream，避免 Safari 阻擋
-  const blob=new Blob([ics],{type:"application/octet-stream"});
+  const blob=new Blob([ics],{type:"text/calendar"});
   const url=URL.createObjectURL(blob);
 
-  // 改成直接開啟，而不是下載
-  window.location.href = url;
+  // 嘗試用 <a download> 方式，讓檔名正確
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`${currentYear}-${pad(currentMonth)}-爸爸探視日.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // 如果 Safari 忽略 download，備案：直接開啟
+  setTimeout(()=>{ URL.revokeObjectURL(url); }, 2000);
 }
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
