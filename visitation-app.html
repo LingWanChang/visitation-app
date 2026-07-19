@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V202607191850</h1>
+      <h1>探視日小幫手V202607191855</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -235,7 +235,8 @@ END:VCALENDAR`;
   setTimeout(()=>{ URL.revokeObjectURL(url); }, 2000);
   */
   // 改成直接開啟，不用 download
-  window.location.href = url;
+  //window.location.href = url;
+  window.open(url);
 }
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
