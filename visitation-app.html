@@ -193,7 +193,7 @@ function toICSDate(d,h=9,m=0){
 function downloadICS(){
   const dates=getDadDates(currentYear,currentMonth);
 
-  // 依週分組
+  // 依週分組，把三天合併成一個事件
   const grouped = {};
   dates.forEach(x=>{
     if(!grouped[x.week]) grouped[x.week] = [];
@@ -201,16 +201,15 @@ function downloadICS(){
   });
 
   const events = Object.values(grouped).map(group=>{
-    const startDate = group[0]; // 第一個探視日
-    const endDate = group[group.length-1]; // 最後一個探視日
-    // 結束時間改成最後一天的 17:00
+    const startDate = group[0];
+    const endDate = group[group.length-1];
     return `BEGIN:VEVENT
 UID:dad-visitation-${dateKey(currentYear,currentMonth,startDate.getDate())}@visitation
 DTSTAMP:${toICSDate(new Date())}
 DTSTART:${toICSDate(startDate,9,0)}
 DTEND:${toICSDate(endDate,17,0)}
 SUMMARY:爸爸探視
-DESCRIPTION:爸爸探視日（第${group.length}天合併）
+DESCRIPTION:爸爸探視日
 END:VEVENT`;
   }).join("\n");
 
@@ -221,9 +220,12 @@ CALSCALE:GREGORIAN
 ${events}
 END:VCALENDAR`;
 
-  const blob=new Blob([ics],{type:"text/calendar;charset=utf-8"});
+  // 改成 application/octet-stream，避免 Safari 阻擋
+  const blob=new Blob([ics],{type:"application/octet-stream"});
   const url=URL.createObjectURL(blob);
-  window.location.href = url; // 直接開啟，避免 Safari 無法下載
+
+  // 用 location.href 直接開啟，不用 download
+  window.location.href = url;
 }
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
