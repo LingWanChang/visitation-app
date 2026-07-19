@@ -224,7 +224,7 @@ END:VCALENDAR`;
   const blob=new Blob([ics],{type:"application/octet-stream"});
   const url=URL.createObjectURL(blob);
 
-  // 用 location.href 直接開啟，不用 download
+  // 改成直接開啟，而不是下載
   window.location.href = url;
 }
 function openGoogle(){
