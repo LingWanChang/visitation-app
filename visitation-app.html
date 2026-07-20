@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V202607202140</h1>
+      <h1>探視日小幫手V202607202150</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -253,8 +253,8 @@ $("year").addEventListener("input",render);
 $("month").addEventListener("change",render);
 $("prev").onclick=()=>{currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--} $("year").value=currentYear;$("month").value=currentMonth;render()};
 $("next").onclick=()=>{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++} $("year").value=currentYear;$("month").value=currentMonth;render()};
-//$("ics").onclick=downloadICS;
-$("ics").onclick = () => exportICS(currentYear, currentMonth);
+$("ics").onclick=downloadICS;
+//$("ics").onclick = () => exportICS(currentYear, currentMonth);
 $("google").onclick=openGoogle;
 render();
 </script>
