@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V1.01</h1>
+      <h1>探視日小幫手V1.02</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -90,14 +90,14 @@
   <div class="grid">
     <section>
       <h2>探視日計算</h2>
-      <div class="form-grid">
-        <label>年份<select id="year"></select></label>
-        <label>月份<select id="month"></select></label>
-      </div>
-      <div class="rule">
+	  <div class="rule">
         <b>目前規則：</b><br>
         每月第 1、3 週的星期五、六、日到爸爸那邊。<br>
         如果 1 號是星期六或星期日，該週不算第一週，從下一個星期一開始計算。
+      </div>
+      <div class="form-grid">
+        <label>年份<select id="year"></select></label>
+        <label>月份<select id="month"></select></label>
       </div>
       <div class="actions">
         <button class="primary" id="prev">← 上個月</button>
@@ -326,8 +326,19 @@ function openGoogle(){
   const year = currentYear; // 抓目前查詢的年份
   const url = `https://lingwanchang.github.io/visitation-app/docs/${year}_VisitationDay.ics`;
 
-  // 開啟 Google Calendar 匯入頁面
-  window.open("https://calendar.google.com/calendar/u/0/r/settings/export", "_blank");
+  // 先觸發下載
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${year}_VisitationDay.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // 再開啟 Google Calendar 匯入頁面
+  window.open("https://calendar.google.com/calendar/u/0/r/settings/import", "_blank");
+
+  // 在 console 提示
+  console.log(`已下載 ${year}_VisitationDay.ics，請到 Google Calendar 匯入頁面匯入`);
 }
 
 $("year").addEventListener("input",render);
