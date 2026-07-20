@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V202607202155</h1>
+      <h1>探視日小幫手V1.0</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -235,9 +235,59 @@ END:VCALENDAR`;
   
   // 改成直接開啟，不用 download
   //window.location.href = url;
-  console.log(ics); // 印出文字內容
-  console.log(url); // 印出 blob URL
-  window.open("https://lingwanchang.github.io/visitation-app/docs/2026-07test.ics");
+  window.open(`https://lingwanchang.github.io/visitation-app/docs/${currentYear}_VisitationDay.ics`);
+}
+function downloadYearICS(){
+  const year = currentYear;
+  let allEvents = "";
+  let allDates = [];
+
+  for(let m=1; m<=12; m++){
+    const dates = getDadDates(year, m);
+    dates.forEach(d=>{
+      const startDate = d.date;
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate()+1);
+
+      const startStr = `${startDate.getFullYear()}${String(startDate.getMonth()+1).padStart(2,"0")}${String(startDate.getDate()).padStart(2,"0")}`;
+      const endStr = `${endDate.getFullYear()}${String(endDate.getMonth()+1).padStart(2,"0")}${String(endDate.getDate()).padStart(2,"0")}`;
+
+      allEvents += `BEGIN:VEVENT
+UID:dad-visitation-${startStr}@visitation
+DTSTAMP:${toICSDate(new Date())}
+DTSTART;VALUE=DATE:${startStr}
+DTEND;VALUE=DATE:${endStr}
+SUMMARY:爸爸探視
+DESCRIPTION:${year}年探視日
+END:VEVENT
+
+`;
+
+      // 收集日期方便 console 檢查
+      allDates.push(`${year}/${m}/${startDate.getDate()}（${weekdays[startDate.getDay()]}）`);
+    });
+  }
+
+  const ics = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//探視日小幫手//TW
+CALSCALE:GREGORIAN
+
+${allEvents}END:VCALENDAR`;
+
+  const blob=new Blob([ics],{type:"text/calendar"});
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`${year}_VisitationDay.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // 在 console 列出全年探視日
+  console.log(`全年 ${year} 探視日：`);
+  console.log(allDates.join("\n"));
 }
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
@@ -253,7 +303,8 @@ $("year").addEventListener("input",render);
 $("month").addEventListener("change",render);
 $("prev").onclick=()=>{currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--} $("year").value=currentYear;$("month").value=currentMonth;render()};
 $("next").onclick=()=>{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++} $("year").value=currentYear;$("month").value=currentMonth;render()};
-$("ics").onclick=downloadICS;
+//$("ics").onclick=downloadICS;
+$("ics").onclick=downloadYearICS;
 //$("ics").onclick = () => exportICS(currentYear, currentMonth);
 $("google").onclick=openGoogle;
 render();
