@@ -193,46 +193,45 @@ function toICSDate(d,h=9,m=0){
 function downloadICS(){
   const dates=getDadDates(currentYear,currentMonth);
 
-  // 依週分組，把三天合併成一個事件
-  const grouped = {};
-  dates.forEach(x=>{
-    if(!grouped[x.week]) grouped[x.week] = [];
-    grouped[x.week].push(x.date);
-  });
+  const events = dates.map(d=>{
+    const startDate = d.date;
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate()+1);
+    const startStr = `${startDate.getFullYear()}${String(startDate.getMonth()+1).padStart(2,"0")}${String(startDate.getDate()).padStart(2,"0")}`;
+    const endStr = `${endDate.getFullYear()}${String(endDate.getMonth()+1).padStart(2,"0")}${String(endDate.getDate()).padStart(2,"0")}`;
 
-  const events = Object.values(grouped).map(group=>{
-    const startDate = group[0];
-    const endDate = group[group.length-1];
     return `BEGIN:VEVENT
-UID:dad-visitation-${dateKey(currentYear,currentMonth,startDate.getDate())}@visitation
+UID:dad-visitation-${startStr}@visitation
 DTSTAMP:${toICSDate(new Date())}
-DTSTART:${toICSDate(startDate,9,0)}
-DTEND:${toICSDate(endDate,17,0)}
+DTSTART;VALUE=DATE:${startStr}
+DTEND;VALUE=DATE:${endStr}
 SUMMARY:爸爸探視
 DESCRIPTION:爸爸探視日
 END:VEVENT`;
-  }).join("\n");
+  }).join("\n\n");
 
-  const ics=`BEGIN:VCALENDAR
+  const ics = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//探視日小幫手//TW
 CALSCALE:GREGORIAN
+
 ${events}
+
 END:VCALENDAR`;
 
   const blob=new Blob([ics],{type:"text/calendar"});
   const url=URL.createObjectURL(blob);
 
   // 嘗試用 <a download> 方式，讓檔名正確
-  const a=document.createElement("a");
+  /*const a=document.createElement("a");
   a.href=url;
-  a.download=`${currentYear}-${pad(currentMonth)}-爸爸探視日.ics`;
+  a.download=`${currentYear}-${pad(currentMonth)}-visitationDay.ics`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-
+*/
   // 如果 Safari 忽略 download，備案：直接開啟
-  setTimeout(()=>{ URL.revokeObjectURL(url); }, 2000);
+  //setTimeout(()=>{ URL.revokeObjectURL(url); }, 2000);
   
   // 改成直接開啟，不用 download
   //window.location.href = url;
@@ -240,7 +239,10 @@ END:VCALENDAR`;
   console.log(url); // 印出 blob URL
   window.open(url);
 }
-
+function exportICS(year, month)
+{
+  window.location.href = `/.netlify/functions/ics?year=${year}&month=${month}`;
+}
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
   if(!dates.length)return;
@@ -255,7 +257,8 @@ $("year").addEventListener("input",render);
 $("month").addEventListener("change",render);
 $("prev").onclick=()=>{currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--} $("year").value=currentYear;$("month").value=currentMonth;render()};
 $("next").onclick=()=>{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++} $("year").value=currentYear;$("month").value=currentMonth;render()};
-$("ics").onclick=downloadICS;
+//$("ics").onclick=downloadICS;
+$("ics").onclick=exportICS;
 $("google").onclick=openGoogle;
 render();
 </script>
