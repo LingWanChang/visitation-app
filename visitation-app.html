@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V202607201850</h1>
+      <h1>探視日小幫手V202607202140</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -102,8 +102,8 @@
       <div class="actions">
         <button class="primary" id="prev">← 上個月</button>
         <button class="primary" id="next">下個月 →</button>
-        <button class="green" id="ics">📥 匯出行事曆</button>
-        <button id="google">📅 Google Calendar</button>
+        <button class="green" id="ics">📥 匯出全年探視日(Ios)</button>
+        <button id="google">📅 匯出全年探視日(Google)</button>
       </div>
     </section>
 
@@ -237,11 +237,7 @@ END:VCALENDAR`;
   //window.location.href = url;
   console.log(ics); // 印出文字內容
   console.log(url); // 印出 blob URL
-  window.open(url);
-}
-function exportICS(year, month)
-{
-  window.location.href = `/.netlify/functions/ics?year=${year}&month=${month}`;
+  window.open("https://lingwanchang.github.io/visitation-app/docs/202607-test.ics");
 }
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
