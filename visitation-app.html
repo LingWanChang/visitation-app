@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V1.0</h1>
+      <h1>探視日小幫手V1.01</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -312,7 +312,7 @@ function changeYear(delta){
     render(); // 重新渲染畫面
   }
 }
-function openGoogle(){
+/*function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
   if(!dates.length)return;
   const d=dates[0].date;
@@ -320,6 +320,14 @@ function openGoogle(){
   const end=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T170000`;
   const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("爸爸探視")}&dates=${start}/${end}&details=${encodeURIComponent("爸爸探視日")}`;
   window.open(url,"_blank");
+}*/
+
+function openGoogle(){
+  const year = currentYear; // 抓目前查詢的年份
+  const url = `https://lingwanchang.github.io/visitation-app/docs/${year}_VisitationDay.ics`;
+
+  // 開啟 Google Calendar 匯入頁面
+  window.open("https://calendar.google.com/calendar/u/0/r/settings/export", "_blank");
 }
 
 $("year").addEventListener("input",render);
