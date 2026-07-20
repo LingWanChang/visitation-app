@@ -190,7 +190,7 @@ function render(){
 function toICSDate(d,h=9,m=0){
   return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(h)}${pad(m)}0000`;
 }
-/*function downloadICS(){
+function downloadICS(){
   const dates=getDadDates(currentYear,currentMonth);
 
   // 依週分組，把三天合併成一個事件
@@ -224,7 +224,7 @@ END:VCALENDAR`;
   const url=URL.createObjectURL(blob);
 
   // 嘗試用 <a download> 方式，讓檔名正確
-  /*const a=document.createElement("a");
+  const a=document.createElement("a");
   a.href=url;
   a.download=`${currentYear}-${pad(currentMonth)}-爸爸探視日.ics`;
   document.body.appendChild(a);
@@ -232,50 +232,13 @@ END:VCALENDAR`;
   document.body.removeChild(a);
 
   // 如果 Safari 忽略 download，備案：直接開啟
-  /*setTimeout(()=>{ URL.revokeObjectURL(url); }, 2000);
-  */
+  setTimeout(()=>{ URL.revokeObjectURL(url); }, 2000);
+  
   // 改成直接開啟，不用 download
   //window.location.href = url;
-  /*window.open(url);
-}
-*/
-
-function downloadICS(year){
-  let events = "";
-
-  for(let month=1; month<=12; month++){
-    const dates = getDadDates(year, month);
-
-    dates.forEach(d=>{
-      const startDate = d.date;
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate()+1);
-
-      const startStr = `${startDate.getFullYear()}${String(startDate.getMonth()+1).padStart(2,"0")}${String(startDate.getDate()).padStart(2,"0")}`;
-      const endStr = `${endDate.getFullYear()}${String(endDate.getMonth()+1).padStart(2,"0")}${String(endDate.getDate()).padStart(2,"0")}`;
-
-      events += `BEGIN:VEVENT
-UID:dad-visitation-${startStr}@visitation
-DTSTAMP:${startStr}T090000Z
-DTSTART;VALUE=DATE:${startStr}
-DTEND;VALUE=DATE:${endStr}
-SUMMARY:爸爸探視
-DESCRIPTION:爸爸探視日
-END:VEVENT
-`;
-    });
-  }
-
-  const ics = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//探視日小幫手//TW
-CALSCALE:GREGORIAN
-${events}END:VCALENDAR`;
-
-  const blob = new Blob([ics], {type:"text/calendar"});
-  const url = URL.createObjectURL(blob);
-  window.location.href = url; // Safari 直接打開
-  //window.open(url);
+  console.log(ics); // 印出文字內容
+  console.log(url); // 印出 blob URL
+  window.open(url);
 }
 
 function openGoogle(){
