@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V07202230</h1>
+      <h1>探視日小幫手V1.0</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -91,14 +91,7 @@
     <section>
       <h2>探視日計算</h2>
       <div class="form-grid">
-        
-		<label>年份
-		  <div style="display:flex;gap:6px;align-items:center">
-			<button type="button" onclick="changeYear(-1)">－</button>
-			<input id="year" type="number" min="2026" max="2056">
-			<button type="button" onclick="changeYear(1)">＋</button>
-		  </div>
-		</label>
+        <label>年份<select id="year"></select></label>
         <label>月份<select id="month"></select></label>
       </div>
       <div class="rule">
@@ -148,6 +141,22 @@ $("year").value=currentYear;
 $("month").innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1} 月</option>`).join("");
 $("month").value=currentMonth;
 $("todayText").textContent=`今天 ${now.toLocaleDateString("zh-TW",{weekday:"long",month:"numeric",day:"numeric"})}`;
+
+// 初始化年份選單
+const yearSelect = $("year");
+yearSelect.innerHTML = Array.from({length: 31}, (_, i) => {
+  const y = 2026 + i;
+  return `<option value="${y}">${y}</option>`;
+}).join("");
+
+// 預設選到當前年份
+yearSelect.value = currentYear;
+
+// 綁定事件
+yearSelect.addEventListener("change", () => {
+  currentYear = Number(yearSelect.value);
+  render();
+});
 
 function dateKey(y,m,d){return `${y}-${pad(m)}-${pad(d)}`}
 function getDadDates(year,month){
