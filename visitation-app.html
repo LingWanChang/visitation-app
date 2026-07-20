@@ -62,7 +62,7 @@
     .day.empty{border-color:transparent;background:transparent;box-shadow:none}
     .day strong{font-size:15px}
     .day.dad{background:#a9e4f2}
-    .day.dad::after{content:"爸爸";display:block;margin-top:8px;font-size:12px;font-weight:900;color:#315f78}
+    .day.dad::after{content:"探視日";display:block;margin-top:8px;font-size:12px;font-weight:900;color:#315f78}
     .day.today{outline:4px solid #ffd66b}
     .list{margin-top:18px;display:grid;gap:8px}
     .date-row{display:flex;justify-content:space-between;gap:10px;border:2px solid var(--ink);border-radius:14px;padding:10px 12px;background:#fff}
@@ -81,8 +81,8 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V1.04</h1>
-      <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
+      <h1>探視日小幫手V1.05</h1>
+      <p>幫你快速算出每個月的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
   </header>
@@ -92,7 +92,7 @@
       <h2>探視日計算</h2>
 	  <div class="rule">
         <b>目前規則：</b><br>
-        每月第 1、3 週的星期五、六、日到爸爸那邊。<br>
+        每月第 1、3 週的星期五、六、日為探視日。<br>
         如果 1 號是星期六或星期日，該週不算第一週，從下一個星期一開始計算。
       </div>
       <div class="form-grid">
@@ -110,7 +110,7 @@
     <aside>
       <h2>本月結果</h2>
       <div class="hero-result">
-        <span>爸爸探視日</span>
+        <span>探視日</span>
         <strong id="count">6 天</strong>
       </div>
       <div class="summary">
@@ -188,7 +188,7 @@ function render(){
   $("calendarTitle").textContent=`${currentYear} 年 ${currentMonth} 月`;
   $("list").innerHTML=dates.map(x=>{
     const d=x.date;
-    return `<div class="date-row"><span>${currentMonth}/${d.getDate()}（${weekdays[d.getDay()]}）</span><b>爸爸探視</b></div>`;
+    return `<div class="date-row"><span>${currentMonth}/${d.getDate()}（${weekdays[d.getDay()]}）</span><b>探視日</b></div>`;
   }).join("");
   const calendar=$("calendar");
   calendar.innerHTML=weekdays.map(x=>`<div class="weekday">${x}</div>`).join("");
@@ -221,8 +221,8 @@ UID:dad-visitation-${startStr}@visitation
 DTSTAMP:${toICSDate(new Date())}
 DTSTART;VALUE=DATE:${startStr}
 DTEND;VALUE=DATE:${endStr}
-SUMMARY:爸爸探視
-DESCRIPTION:爸爸探視日
+SUMMARY:探視日
+DESCRIPTION:探視日
 END:VEVENT`;
   }).join("\n\n");
 
@@ -273,7 +273,7 @@ UID:dad-visitation-${startStr}@visitation
 DTSTAMP:${toICSDate(new Date())}
 DTSTART;VALUE=DATE:${startStr}
 DTEND;VALUE=DATE:${endStr}
-SUMMARY:爸爸探視
+SUMMARY:探視日
 DESCRIPTION:${year}年探視日
 END:VEVENT
 
@@ -318,7 +318,7 @@ function changeYear(delta){
   const d=dates[0].date;
   const start=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T090000`;
   const end=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T170000`;
-  const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("爸爸探視")}&dates=${start}/${end}&details=${encodeURIComponent("爸爸探視日")}`;
+  const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("探視日")}&dates=${start}/${end}&details=${encodeURIComponent("探視日")}`;
   window.open(url,"_blank");
 }*/
 
@@ -336,7 +336,7 @@ function openGoogle()
   document.body.removeChild(a);
 
   // 再開啟 Google Calendar 的匯入頁面
-  window.open("https://calendar.google.com/calendar/u/0/r/settings/import", "_blank");
+  //window.open("https://calendar.google.com/calendar/u/0/r/settings/import", "_blank");
 }
 
 $("year").addEventListener("input",render);
