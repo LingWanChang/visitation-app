@@ -235,7 +235,7 @@ END:VCALENDAR`;
   
   // 改成直接開啟，不用 download
   //window.location.href = url;
-  window.open(`https://lingwanchang.github.io/visitation-app/docs/${currentYear}_VisitationDay.ics`);
+  window.open(`https://lingwanchang.github.io/visitation-app/calendar/${currentYear}_VisitationDay.ics`);
 }
 function downloadYearICS(){
   const year = currentYear;
@@ -303,8 +303,8 @@ $("year").addEventListener("input",render);
 $("month").addEventListener("change",render);
 $("prev").onclick=()=>{currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--} $("year").value=currentYear;$("month").value=currentMonth;render()};
 $("next").onclick=()=>{currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++} $("year").value=currentYear;$("month").value=currentMonth;render()};
-//$("ics").onclick=downloadICS;
-$("ics").onclick=downloadYearICS;
+$("ics").onclick=downloadICS;
+//$("ics").onclick=downloadYearICS;
 //$("ics").onclick = () => exportICS(currentYear, currentMonth);
 $("google").onclick=openGoogle;
 render();
