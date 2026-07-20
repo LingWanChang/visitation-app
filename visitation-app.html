@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V07202220</h1>
+      <h1>探視日小幫手V07202230</h1>
       <p>幫你快速算出每個月爸爸的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -91,7 +91,14 @@
     <section>
       <h2>探視日計算</h2>
       <div class="form-grid">
-        <label>年份<input id="year" type="number"></label>
+        
+		<label>年份
+		  <div style="display:flex;gap:6px;align-items:center">
+			<button type="button" onclick="changeYear(-1)">－</button>
+			<input id="year" type="number" min="2026" max="2056">
+			<button type="button" onclick="changeYear(1)">＋</button>
+		  </div>
+		</label>
         <label>月份<select id="month"></select></label>
       </div>
       <div class="rule">
@@ -288,6 +295,13 @@ ${allEvents}END:VCALENDAR`;
   // 在 console 列出全年探視日
   console.log(`全年 ${year} 探視日：`);
   console.log(allDates.join("\n"));
+}
+function changeYear(delta){
+  let y = Number($("year").value) + delta;
+  if(y >= 2026 && y <= 2056){
+    $("year").value = y;
+    render(); // 重新渲染畫面
+  }
 }
 function openGoogle(){
   const dates=getDadDates(currentYear,currentMonth);
