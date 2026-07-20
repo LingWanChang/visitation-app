@@ -81,7 +81,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V1.05</h1>
+      <h1>探視日小幫手V1.0</h1>
       <p>幫你快速算出每個月的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -95,6 +95,7 @@
         每月第 1、3 週的星期五、六、日為探視日。<br>
         如果 1 號是星期六或星期日，該週不算第一週，從下一個星期一開始計算。
       </div>
+	  <br>
       <div class="form-grid">
         <label>年份<select id="year"></select></label>
         <label>月份<select id="month"></select></label>
@@ -108,11 +109,7 @@
     </section>
 
     <aside>
-      <h2>本月結果</h2>
-      <div class="hero-result">
-        <span>探視日</span>
-        <strong id="count">6 天</strong>
-      </div>
+      <h2 id="title">本月結果</h2>
       <div class="summary">
         <div class="summary-box"><span>第 1 週</span><strong id="week1">—</strong></div>
         <div class="summary-box"><span>第 3 週</span><strong id="week3">—</strong></div>
@@ -180,8 +177,9 @@ function getDadDates(year,month){
 function render(){
   currentYear=Number($("year").value);
   currentMonth=Number($("month").value);
+  // 更新標題顯示「年份-月份 探視日」
+  $("title").innerText = `${currentYear}-${pad(currentMonth)} 探視日`;
   const dates=getDadDates(currentYear,currentMonth);
-  $("count").textContent=`${dates.length} 天`;
   const w1=dates.filter(x=>x.week===1),w3=dates.filter(x=>x.week===3);
   $("week1").textContent=w1.length?`${w1[0].date.getDate()}-${w1[w1.length-1].date.getDate()} 日`:"—";
   $("week3").textContent=w3.length?`${w3[0].date.getDate()}-${w3[w3.length-1].date.getDate()} 日`:"—";
