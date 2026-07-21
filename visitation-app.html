@@ -118,7 +118,7 @@
         <button class="primary" id="prev">← 上個月</button>
         <button class="primary" id="next">下個月 →</button>
         <button class="green" id="ics">📥 匯出全年探視日(Ios)</button>
-        <button id="google">📅 匯出全年探視日(Google)</button>
+        <!--<button id="google">📅 匯出全年探視日(Google)</button>-->
       </div>
     </section>
 
@@ -138,7 +138,7 @@
   </section>
 
   <footer>
-    這個工具依照你提供的探視規則計算。匯出的 ICS 檔案可以匯入 Google Calendar、Apple 行事曆與其他支援行事曆的 App。
+    這個工具依照你提供的探視規則計算。匯出的 ICS 檔案可以直接加入Apple 行事曆。
   </footer>
 </main>
 
@@ -375,7 +375,7 @@ $("next").onclick=()=>{currentMonth++;if(currentMonth>12){currentMonth=1;current
 $("ics").onclick=downloadICS;
 //$("ics").onclick=downloadYearICS;
 //$("ics").onclick = () => exportICS(currentYear, currentMonth);
-$("google").onclick=openGoogle;
+//$("google").onclick=openGoogle;
 render();
 </script>
 </body>
