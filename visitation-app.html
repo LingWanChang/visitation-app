@@ -87,7 +87,7 @@
 <main>
   <header>
     <div>
-      <h1>探視日小幫手V1.0</h1>
+      <h1>探視日小幫手V2.0</h1>
       <p>幫你快速算出每個月的探視日，還可以一鍵匯出行事曆。</p>
     </div>
     <div class="today-pill" id="todayText">今天</div>
@@ -171,17 +171,17 @@ yearSelect.addEventListener("change", () => {
 
 function dateKey(y,m,d){return `${y}-${pad(m)}-${pad(d)}`}
 function getDadDates(year,month){
-  const first=new Date(year,month-1,1);
-  const firstDay=first.getDay();
+  const first=new Date(year,month-1,1);  // 取得當月 1 號
+  const firstDay=first.getDay();  // 1 號是星期幾 (0=日, 6=六)
   let firstMonday;
-  if(firstDay===6) firstMonday=3;
-  else if(firstDay===0) firstMonday=2;
-  else firstMonday=1+(1-firstDay+7)%7;
+  if(firstDay===6) firstMonday=3;  // 如果 1 號是週六 → 第一週從 3 號開始算 (週一)
+  else if(firstDay===0) firstMonday=2; // 如果 1 號是週日 → 第一週從 2 號開始算 (週一)
+  else firstMonday=1+(1-firstDay);  // 如果是週一到週五 → 找出當週的週一
   const dates=[];
   [1,3].forEach(week=>{
-    const monday=firstMonday+(week-1)*7;
+    const monday=firstMonday+(week-1)*7;  // 找出第 1 週、第 3 週的週一
     [4,5,6].forEach(offset=>{
-      const day=monday+offset;
+      const day=monday+offset;  // 週五(+4)、週六(+5)、週日(+6)
       const d=new Date(year,month-1,day);
       if(d.getMonth()===month-1) dates.push({date:d,week});
     });
